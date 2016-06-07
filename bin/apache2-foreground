@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+rm -f /var/run/apache2/apache2.pid
+
+ls /proc/$$/fd > /fds
+
+exec apache2 -DFOREGROUND

@@ -1,0 +1,71 @@
+# Adapted from https://github.com/GoogleCloudPlatform/php-docker
+FROM quay.io/aptible/ubuntu:16.04
+
+# Runtime deps / tools users might need to install deps
+RUN apt-install --no-install-recommends \
+    gettext \
+    git \
+    mercurial \
+    subversion \
+    curl \
+    ca-certificates \
+    libbz2-1.0 \
+    libcurl3 \
+    openssl \
+    libgettextpo0 \
+    libicu55 \
+    libmcrypt4 \
+    libpcre3 \
+    libpng12-0 \
+    libpq5 \
+    libreadline6 \
+    librecode0 \
+    libsqlite3-0 \
+    libssl1.0.0 \
+    libxml2 \
+    libxslt1.1 \
+    zlib1g \
+    apache2 \
+    psmisc
+
+ENV APP_DIR=/app \
+    PHP_DIR=/opt/php \
+    PHP_VERSION=<%= ENV.fetch 'PHP_VERSION' %>
+
+COPY <%= ENV.fetch 'TAG' %>/gpgkeys /gpgkeys
+COPY build-scripts /build-scripts
+
+RUN /bin/bash /build-scripts/apt-build-deps.sh install && \
+    /bin/bash /build-scripts/build-php.sh && \
+    /bin/bash /build-scripts/apt-build-deps.sh uninstall
+
+ENV PATH=${PHP_DIR}/bin:$PATH
+
+ADD <%= ENV.fetch 'TAG' %>/php.ini ${PHP_DIR}/lib/php.ini
+ADD etc/extensions.ini ${PHP_DIR}/lib/conf.d
+ADD etc/overrides.ini ${PHP_DIR}/lib/conf.d
+
+RUN composer_install="install-composer.php" \
+ && curl -fsSL https://getcomposer.org/installer > "$composer_install" \
+ && php "$composer_install" --install-dir="$PHP_DIR/bin" --filename=composer \
+ && rm "$composer_install"
+
+EXPOSE 80
+
+RUN mkdir -p "$APP_DIR"
+RUN rm -rf /var/www/html && mkdir -p /var/www/html
+COPY static/index.php /var/www/html/
+RUN mkdir -p                   /var/lock/apache2 /var/run/apache2 /var/log/apache2 \
+ && chown -R www-data:www-data /var/lock/apache2 /var/run/apache2 /var/log/apache2 /var/www/html
+RUN a2dismod mpm_event && a2enmod mpm_prefork
+RUN a2enmod rewrite
+RUN rm -rf /etc/apache2/conf-enabled /etc/apache2/sites-enabled
+
+COPY etc/apache2.conf /etc/apache2/apache2.conf
+COPY bin/apache2-foreground /usr/local/bin/
+
+COPY test /tmp/test
+RUN bats /tmp/test
+
+# TODO: Logging
+CMD ["apache2-foreground"]
