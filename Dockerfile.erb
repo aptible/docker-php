@@ -33,6 +33,7 @@ ENV APP_DIR=/app \
     PHP_VERSION=<%= ENV.fetch 'PHP_VERSION' %>
 
 COPY <%= ENV.fetch 'TAG' %>/gpgkeys /gpgkeys
+COPY <%= ENV.fetch 'TAG' %>/patches /patches
 COPY build-scripts /build-scripts
 
 RUN /bin/bash /build-scripts/apt-build-deps.sh install && \

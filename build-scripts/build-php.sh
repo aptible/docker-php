@@ -37,6 +37,12 @@ rm php.tar.gz.asc
 
 pushd ${PHP_SRC}
 rm -f configure
+
+for patchfile in "/patches/"*.patch; do
+  echo "Applying ${patchfile}"
+  patch -p1 -d . < "$patchfile"
+done
+
 ./buildconf --force
 ./configure \
     --prefix="${PHP_DIR}" \
