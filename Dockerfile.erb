@@ -64,9 +64,9 @@ RUN rm -rf /etc/apache2/conf-enabled /etc/apache2/sites-enabled
 
 COPY etc/apache2.conf /etc/apache2/apache2.conf
 COPY bin/apache2-foreground /usr/local/bin/
+COPY bin/apache2-wrapper /usr/local/bin/
 
 COPY test /tmp/test
 RUN bats /tmp/test
 
-# TODO: Logging
-CMD ["apache2-foreground"]
+CMD ["apache2-wrapper"]

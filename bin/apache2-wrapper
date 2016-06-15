@@ -1,0 +1,17 @@
+#!/bin/bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Detect known PHP frameworks and forward their logs to
+# stdout
+if [[ -d "/app/storage/logs" ]]; then
+  # Laravel
+  laravel_log="/app/storage/logs/laravel.log"
+  touch "$laravel_log"
+  chown www-data:www-data "$laravel_log"
+  tail -F "$laravel_log" &
+fi
+
+# Finally, start Apache in the foreground.
+exec apache2-foreground
