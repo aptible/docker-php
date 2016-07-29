@@ -11,9 +11,9 @@ Aptible PHP Base Image
 
 ## Available Tags
 
-* `latest`: Currently PHP 7.0.7
-* `7.0`: PHP 7.0.7
-* `5.6`: PHP 5.6.22
+* `latest`: Currently PHP 7.0.9
+* `7.0`: PHP 7.0.9
+* `5.6`: PHP 5.6.24
 
 ## Copyright and License
 
