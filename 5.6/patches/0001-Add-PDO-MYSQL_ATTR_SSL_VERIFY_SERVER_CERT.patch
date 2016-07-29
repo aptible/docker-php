@@ -1,0 +1,77 @@
+From 3d3368cdedd0ac5c3c26b993a110c468c3116fe5 Mon Sep 17 00:00:00 2001
+From: Thomas Orozco <thomas@orozco.fr>
+Date: Thu, 9 Jun 2016 10:45:40 +0200
+Subject: [PATCH] Add PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT
+
+---
+ ext/pdo_mysql/mysql_driver.c                       | 12 ++++++++++++
+ ext/pdo_mysql/pdo_mysql.c                          |  3 +++
+ ext/pdo_mysql/php_pdo_mysql_int.h                  |  3 +++
+ ext/pdo_mysql/tests/pdo_mysql_class_constants.phpt |  1 +
+ 4 files changed, 19 insertions(+)
+
+diff --git a/ext/pdo_mysql/mysql_driver.c b/ext/pdo_mysql/mysql_driver.c
+index e82fdf4..6da99f0 100644
+--- a/ext/pdo_mysql/mysql_driver.c
++++ b/ext/pdo_mysql/mysql_driver.c
+@@ -731,6 +731,18 @@ static int pdo_mysql_handle_factory(pdo_dbh_t *dbh, zval *driver_options TSRMLS_
+ 			}
+ 		}
+ #endif
++
++#ifdef PDO_USE_MYSQLND
++		{
++			long ssl_verify_cert = pdo_attr_lval(driver_options,
++					PDO_MYSQL_ATTR_SSL_VERIFY_SERVER_CERT, -1);
++			if (ssl_verify_cert != -1) {
++				connect_opts |= ssl_verify_cert ?
++					CLIENT_SSL_VERIFY_SERVER_CERT:
++					CLIENT_SSL_DONT_VERIFY_SERVER_CERT;
++			}
++		}
++#endif
+ 	}
+ 
+ #ifdef PDO_MYSQL_HAS_CHARSET
+diff --git a/ext/pdo_mysql/pdo_mysql.c b/ext/pdo_mysql/pdo_mysql.c
+index 6433218..13ed362 100644
+--- a/ext/pdo_mysql/pdo_mysql.c
++++ b/ext/pdo_mysql/pdo_mysql.c
+@@ -127,6 +127,9 @@ static PHP_MINIT_FUNCTION(pdo_mysql)
+ 	REGISTER_PDO_CLASS_CONST_LONG("MYSQL_ATTR_SERVER_PUBLIC_KEY", (long)PDO_MYSQL_ATTR_SERVER_PUBLIC_KEY);
+ #endif
+ 	REGISTER_PDO_CLASS_CONST_LONG("MYSQL_ATTR_MULTI_STATEMENTS", (long)PDO_MYSQL_ATTR_MULTI_STATEMENTS);
++#ifdef PDO_USE_MYSQLND
++	 REGISTER_PDO_CLASS_CONST_LONG("MYSQL_ATTR_SSL_VERIFY_SERVER_CERT", (long)PDO_MYSQL_ATTR_SSL_VERIFY_SERVER_CERT);
++#endif
+ 
+ #ifdef PDO_USE_MYSQLND
+ 	mysqlnd_reverse_api_register_api(&pdo_mysql_reverse_api TSRMLS_CC);
+diff --git a/ext/pdo_mysql/php_pdo_mysql_int.h b/ext/pdo_mysql/php_pdo_mysql_int.h
+index 8427f43..8e12ca9 100644
+--- a/ext/pdo_mysql/php_pdo_mysql_int.h
++++ b/ext/pdo_mysql/php_pdo_mysql_int.h
+@@ -175,6 +175,9 @@ enum {
+ 	PDO_MYSQL_ATTR_SERVER_PUBLIC_KEY,
+ #endif
+ 	PDO_MYSQL_ATTR_MULTI_STATEMENTS,
++#ifdef PDO_USE_MYSQLND
++	PDO_MYSQL_ATTR_SSL_VERIFY_SERVER_CERT,
++#endif
+ };
+ 
+ #endif
+diff --git a/ext/pdo_mysql/tests/pdo_mysql_class_constants.phpt b/ext/pdo_mysql/tests/pdo_mysql_class_constants.phpt
+index f3d0fa6..fba1c24 100644
+--- a/ext/pdo_mysql/tests/pdo_mysql_class_constants.phpt
++++ b/ext/pdo_mysql/tests/pdo_mysql_class_constants.phpt
+@@ -27,6 +27,7 @@ if (!extension_loaded('mysqli') && !extension_loaded('mysqlnd')) {
+ 		"MYSQL_ATTR_SSL_CIPHER"						=> true,
+ 		"MYSQL_ATTR_COMPRESS"						=> true,
+ 		"MYSQL_ATTR_MULTI_STATEMENTS"					=> true,
++		"MYSQL_ATTR_SSL_VERIFY_SERVER_CERT"				=> true,
+ 	);
+ 
+ 	if (!MySQLPDOTest::isPDOMySQLnd()) {
+-- 
+2.7.4
