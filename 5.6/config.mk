@@ -1,1 +1,1 @@
-export PHP_VERSION=5.6.26
+export PHP_VERSION=5.6.28
