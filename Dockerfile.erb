@@ -26,7 +26,14 @@ RUN apt-install --no-install-recommends \
     libxslt1.1 \
     zlib1g \
     apache2 \
-    psmisc
+    psmisc \
+    libfontconfig1 \
+    libfreetype6 \
+    libjpeg8 \
+    libtiff5 \
+    libvpx3 \
+    libxpm4
+
 
 ENV APP_DIR=/app \
     PHP_DIR=/opt/php \

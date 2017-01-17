@@ -54,6 +54,12 @@ BUILD_DEPS=" \
     libxslt1-dev \
     zlib1g-dev \
     apache2-dev \
+    libfontconfig1-dev \
+    libfreetype6-dev \
+    libjpeg8-dev \
+    libtiff5-dev \
+    libvpx-dev \
+    libxpm-dev
   "
 
 function install_apt_deps {

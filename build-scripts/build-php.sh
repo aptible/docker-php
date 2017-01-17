@@ -74,6 +74,11 @@ done
     --with-curl \
     --with-gettext=shared \
     --with-gd=shared \
+    --with-jpeg-dir \
+    --with-png-dir \
+    --with-xpm-dir \
+    --with-vpx-dir \
+    --with-freetype-dir \
     --with-pdo_sqlite=shared,/usr \
     --with-sqlite3=shared,/usr \
     --with-xmlrpc=shared \
