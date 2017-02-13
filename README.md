@@ -9,11 +9,23 @@ Aptible PHP Base Image
     docker pull quay.io/aptible/php
     docker run quay.io/aptible/php [options]
 
+## PHP Patch
+
+This image carries a PHP patch to allow disabling SSL verification for MySQL
+PDO connections via the `PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT` attribute (set
+it to `false` to disable verification; it otherwise defaults to `true`).
+
+This is a fix for: https://bugs.php.net/bug.php?id=71003
+
+Make sure you understand the implications before using this attribute. If
+you're deploying on Aptible, feel free to reach out to support.
+
 ## Available Tags
 
-* `latest`: Currently PHP 7.0.9
-* `7.0`: PHP 7.0.9
-* `5.6`: PHP 5.6.24
+* `7.1`
+* `7.0`
+* `5.6`
+* `latest`: currently `7.1` (not recommended: this tag changes over time)
 
 ## Copyright and License
 
