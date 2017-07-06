@@ -11,9 +11,11 @@ Aptible PHP Base Image
 
 ## PHP Patch
 
-This image carries a PHP patch to allow disabling SSL verification for MySQL
-PDO connections via the `PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT` attribute (set
-it to `false` to disable verification; it otherwise defaults to `true`).
+For 5.6, this image carries a PHP patch to allow disabling SSL verification for
+MySQL PDO connections via the `PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT`
+attribute (set it to `false` to disable verification; it otherwise defaults to
+`true`). For other versions, this patch was incorporated by the PHP team in
+mainline PHP, so those images don't carry additional patches.
 
 This is a fix for: https://bugs.php.net/bug.php?id=71003
 

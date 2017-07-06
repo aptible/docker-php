@@ -38,6 +38,7 @@ rm php.tar.gz.asc
 pushd ${PHP_SRC}
 rm -f configure
 
+shopt -s nullglob
 for patchfile in "/patches/"*.patch; do
   echo "Applying ${patchfile}"
   patch -p1 -d . < "$patchfile"
