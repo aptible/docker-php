@@ -24,10 +24,11 @@ you're deploying on Aptible, feel free to reach out to support.
 
 ## Available Tags
 
+* `7.2`
 * `7.1`
 * `7.0`
 * `5.6`
-* `latest`: currently `7.1` (not recommended: this tag changes over time)
+* `latest`: currently `7.2` (not recommended: this tag changes over time)
 
 ## Copyright and License
 
