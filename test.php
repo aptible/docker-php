@@ -16,6 +16,7 @@ new PDO(
 );
 } catch (PDOException $e) {
   echo "fail!\n";
+  var_dump($e);
   exit(1);
 }
 

@@ -1,1 +1,1 @@
-export PHP_VERSION=7.2.10
+export PHP_VERSION=7.2.12
