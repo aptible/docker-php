@@ -9,6 +9,10 @@ HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # patch we carry allows for.
 IMG="$REGISTRY/$REPOSITORY:$TAG"
 
+# NOTE: We use MySQL 5.7 because PHP cannot connect using MySQL's 8
+# caching_sha2_password authentication.
+MYSQL_IMG="quay.io/aptible/mysql:5.7"
+
 MYSQL_CONTAINER='php-mysql-test'
 PASSPHRASE="php-pass"
 
@@ -37,7 +41,7 @@ docker run -d \
   -e "PASSPHRASE=${PASSPHRASE}" \
   --name "$MYSQL_CONTAINER" \
   --entrypoint bash \
-  quay.io/aptible/mysql \
+  "$MYSQL_IMG" \
   -c 'run-database.sh --initialize && touch /initialized && exec run-database.sh'
 
 wait_for_mysql
