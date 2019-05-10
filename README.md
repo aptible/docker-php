@@ -34,4 +34,4 @@ you're deploying on Aptible, feel free to reach out to support.
 
 MIT License, see [LICENSE](LICENSE.md) for details.
 
-Copyright (c) 2016 [Aptible](https://www.aptible.com) and contributors.
+Copyright (c) 2019 [Aptible](https://www.aptible.com) and contributors.
