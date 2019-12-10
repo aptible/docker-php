@@ -4,6 +4,14 @@
 
 Aptible PHP Base Image
 
+This image was originally created to make it easier to connect to MySQL databases
+hosted on Aptible Deploy but is no longer necessary. We do not recommend that
+customers use this image, and instead recommend the Official Docker PHP image:
+https://hub.docker.com/_/php
+
+Please see our [FAQ](https://www.aptible.com/documentation/enclave/tutorials/faq/aptible-base-images.html)
+for further information.
+
 ## Installation and Usage
 
     docker pull quay.io/aptible/php
